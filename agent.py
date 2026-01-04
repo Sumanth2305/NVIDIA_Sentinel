@@ -62,11 +62,15 @@ class NvidiaSentinelAgent:
         cypher_generation_template = """
         You are an expert Neo4j Developer translating user questions into Cypher.
         The Schema: {schema}
+        
+        VALID RELATIONSHIP TYPES: ['PARTNERS_WITH', 'LOCATED_IN', 'ANNOUNCED', 'MENTIONED_IN', 'AFFECTS', 'SUPPLIES_TO', 'HAS_CEO', 'COMPETES_WITH']
 
         CRITICAL INSTRUCTIONS:
         1. SEARCH BROADLY: Use directionless arrows -[r]- to find connections.
-        2. FIND PRODUCTS: Look for [:SUPPLIES_TO], [:PRODUCES], or [:MANUFACTURES].
-        3. CITATIONS: The Article might be connected to the Company OR the Product. Check both paths.
+        2. DO NOT assume labels: Use (n)-[r]-(m) if unsure of labels.
+        3. FIND SUPPLIERS: Use [:SUPPLIES_TO|PARTNERS_WITH] and do NOT restrict the source to :Company (it could be a Product or Country).
+        4. FIND RISKS: Look for nodes labeled :Event that -[:AFFECTS]-> Companies.
+        5. CITATIONS: The Article might be connected to the Company OR the Product. Check both paths.
 
         Examples:
         Question: "What products does TSMC supply?"
@@ -74,6 +78,16 @@ class NvidiaSentinelAgent:
                 WHERE toLower(c.id) CONTAINS 'tsmc' 
                 OPTIONAL MATCH (c)-[:MENTIONED_IN]-(a:Article) 
                 RETURN c.id, type(r), p.id, a.url
+
+        Question: "Who supplies TSMC?"
+        Cypher: MATCH (supplier)-[r:SUPPLIES_TO|PARTNERS_WITH]-(c:Company)
+                WHERE toLower(c.id) CONTAINS 'tsmc'
+                RETURN labels(supplier), supplier.id, type(r), c.id
+
+        Question: "Identify critical supply chain risks."
+        Cypher: MATCH (e:Event)-[r]-(c:Company)
+                WHERE type(r) = 'AFFECTS'
+                RETURN e.id, type(r), c.id LIMIT 10
 
         Question: "What is connected to Nvidia?"
         Cypher: MATCH (c:Company)-[r]-(target) 
@@ -197,13 +211,16 @@ class NvidiaSentinelAgent:
             entity_name = self.entity_chain.invoke({"question": question}).content.strip()
             print(f"🕸️ Visualizing Neighborhood for: {entity_name}")
             
-            # 2. Query the Graph
+            # 2. Query the Graph (Safe 2-Hop Expansion)
+            # Strategy: Find central node -> expand 2 layers out WITHOUT filtering the neighbors by name.
             query = """
-
-            MATCH (n)-[r]-(m)
-            WHERE toLower(n.id) CONTAINS toLower($name)
-            RETURN n, type(r) as r_type, m LIMIT 25
+            MATCH (center) WHERE toLower(center.id) CONTAINS toLower($name)
+            WITH center LIMIT 1
+            MATCH path = (center)-[*1..2]-(m)
+            UNWIND relationships(path) as r
+            RETURN startNode(r) as n, type(r) as r_type, endNode(r) as m LIMIT 100
             """
+            
             data = self.graph.query(query, params={"name": entity_name})
             
             # 3. Format for Streamlit AGraph

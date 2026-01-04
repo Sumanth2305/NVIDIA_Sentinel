@@ -250,7 +250,7 @@ st.markdown("""
 
 # --- 4. BACKEND SETUP ---
 @st.cache_resource
-def get_agent_v5():
+def get_agent_v16():
     return NvidiaSentinelAgent()
 
 def get_base64_of_bin_file(bin_file):
@@ -360,9 +360,9 @@ def main_app():
         st.markdown("### 🚀 QUICK INTEL")
         SUGGESTED_QUESTIONS = [
             "Who supplies TSMC?",
-            "How would a Taiwan blockade affect Nvidia?",
-            "What products does ASML manufacture?",
-            "Identify critical supply chain risks."
+            "Identify critical supply chain risks.",
+            "What is connected to Nvidia?",
+            "What is the relationship between OpenAI and Microsoft?"
         ]
         for q in SUGGESTED_QUESTIONS:
             if st.button(q, use_container_width=True):
@@ -398,7 +398,8 @@ def main_app():
                         g_data = message["graph_data"]
                         nodes = [Node(id=n["id"], label=n["label"], size=15, color="#10b981") for n in g_data["nodes"]]
                         edges = [Edge(source=e["source"], target=e["target"], type="CURVE_SMOOTH") for e in g_data["edges"]]
-                        config = Config(width="100%", height=400, directed=True, nodeHighlightBehavior=True, highlightColor="#F7A7A6", collapsible=False)
+                        # Fix for DuplicateID: Unique height per instance
+                        config = Config(width="100%", height=400+i, directed=True, nodeHighlightBehavior=True, highlightColor="#F7A7A6", collapsible=False)
                         agraph(nodes=nodes, edges=edges, config=config)
 
     # Input
@@ -412,7 +413,7 @@ def main_app():
         
         with st.spinner("🔍 Analyzing..."):
             try:
-                agent = get_agent_v5()
+                agent = get_agent_v16()
                 response_data = agent.ask(prompt)
                 
                 final_html_card = textwrap.dedent(f"""
