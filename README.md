@@ -3,6 +3,12 @@
 **NVIDIA Sentinel** is an AI-powered Agentic Intelligence system designed to map and monitor the complex dependencies of the semiconductor supply chain of NVIDIA. By utilizing **GraphRAG** (Knowledge Graphs + RAG), Sentinel uncovers "multi-hop" risks that traditional vector-based search engines miss.
 
 
+## 🎥 Demo
+
+https://github.com/user-attachments/assets/working.mov
+
+*Watch Sentinel in action: Real-time graph traversal, text-to-Cypher translation, and interactive visualization.*
+
 ---
 
 ## 🚀 The Core Innovation
