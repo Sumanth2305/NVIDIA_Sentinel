@@ -5,9 +5,10 @@
 
 ## 🎥 Demo
 
-https://github.com/user-attachments/assets/working.mov
+https://github.com/Sumanth2305/NVIDIA_Sentinel/assets/WORKING.mov
 
 *Watch Sentinel in action: Real-time graph traversal, text-to-Cypher translation, and interactive visualization.*
+
 
 ---
 
