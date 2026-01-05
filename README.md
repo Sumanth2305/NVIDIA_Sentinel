@@ -1,25 +1,22 @@
-# 🕸️ NVIDIA Sentinel: Supply Chain Intelligence Agent
+# NVIDIA Sentinel: Supply Chain Intelligence Agent
 
 **NVIDIA Sentinel** is an AI-powered Agentic Intelligence system designed to map and monitor the complex dependencies of the semiconductor supply chain of NVIDIA. By utilizing **GraphRAG** (Knowledge Graphs + RAG), Sentinel uncovers "multi-hop" risks that traditional vector-based search engines miss.
 
 
-## 🎥 Demo
+## Demo
 
-https://github.com/Sumanth2305/NVIDIA_Sentinel/assets/WORKING.mov
-
-*Watch Sentinel in action: Real-time graph traversal, text-to-Cypher translation, and interactive visualization.*
-
+https://github.com/user-attachments/assets/0d67124b-93c7-4a9f-8bcc-0e3c49315243
 
 ---
 
-## 🚀 The Core Innovation
+## The Core Innovation
 Traditional RAG finds "similar text." **Sentinel** understands "relationships." 
 If a user asks about a drought in Taiwan, Sentinel doesn't just find articles about water; it traverses the graph: 
 `[Taiwan Drought] -> [TSMC Fabrication] -> [NVIDIA Blackwell Series] -> [Revenue Impact]`.
 
 ---
 
-## 🏗️ What I Built (and Learned)
+## What I Built (and Learned)
 
 Instead of a standard RAG pipeline, I implemented **Graph RAG**. Here’s the workflow I engineered:
 
@@ -28,7 +25,7 @@ Instead of a standard RAG pipeline, I implemented **Graph RAG**. Here’s the wo
 *   **Text-to-Cypher with Transparency:** The model translates natural language into Neo4j Cypher queries. Crucially, I built it to be **"White-Box"**—it shows the generated code to the user, ensuring trust and explainability for enterprise analysts. It traverses the graph to find multi-hop answers.
 ---
 
-## ✨ Key Features
+## Key Features
 * **Agentic Intent Routing:** Automatically distinguishes between general chat and complex data queries using `LangChain`.
 * **Text-to-Cypher Engine:** Translates natural language into verified Neo4j queries with built-in hallucination guards.
 * **Automated Knowledge Ingestion:** A specialized ETL pipeline that scrapes news (NewsAPI/BeautifulSoup) and extracts entities via `LLMGraphTransformer`.
@@ -37,7 +34,7 @@ Instead of a standard RAG pipeline, I implemented **Graph RAG**. Here’s the wo
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 * **Orchestration:** LangChain (Agents & Chains)
 * **LLM:** OpenAI GPT-4o / GPT-4o-mini
 * **Database:** Neo4j AuraDB (Graph)
@@ -46,7 +43,7 @@ Instead of a standard RAG pipeline, I implemented **Graph RAG**. Here’s the wo
 
 ---
 
-## ⚡ Getting Started
+## Getting Started
 
 1. **Clone the Repo**
    ```bash
